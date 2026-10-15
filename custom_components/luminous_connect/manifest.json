@@ -1,10 +1,13 @@
 {
   "domain": "luminous_connect",
   "name": "Luminous Connect X",
-  "codeowners": [],
+  "codeowners": ["@vivek-pk"],
   "config_flow": true,
-  "documentation": "https://luminousconnectx.com",
+  "dependencies": [],
+  "documentation": "https://github.com/vivek-pk/luminous-connect-ha",
+  "integration_type": "hub",
   "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/vivek-pk/luminous-connect-ha/issues",
   "requirements": [],
-  "version": "0.1.0"
+  "version": "0.2.0"
 }

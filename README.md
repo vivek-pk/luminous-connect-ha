@@ -2,11 +2,27 @@
 
 Reads your solar plant data from the Luminous Connect X cloud every 2 minutes.
 
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://hacs.xyz)
+[![Validate](https://github.com/vivek-pk/luminous-connect-ha/actions/workflows/validate.yml/badge.svg)](https://github.com/vivek-pk/luminous-connect-ha/actions/workflows/validate.yml)
+
 ## Install
+
+### With HACS (recommended)
+
+1. Click to open this repository in HACS on your Home Assistant, then click **Download**:
+
+   [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=vivek-pk&repository=luminous-connect-ha&category=integration)
+
+2. Restart Home Assistant.
+3. Click to add the integration, then enter your luminousconnectx.com email and password:
+
+   [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=luminous_connect)
+
+### Manual
 
 1. Copy `custom_components/luminous_connect` into your Home Assistant `config/custom_components/` folder.
 2. Restart Home Assistant.
-3. Go to **Settings → Devices & services → Add integration → Luminous Connect X** and enter your luminousconnectx.com email and password.
+3. Use the **Add integration** button above, or go to **Settings → Devices & services → Add integration → Luminous Connect X**.
 
 Each plant shows up as a device with these sensors: solar, load and grid power (kW); battery % and voltage; grid voltage; solar energy today, this month and lifetime; consumption today (kWh); battery and grid state; and last update time.
 
