@@ -9,7 +9,7 @@ from homeassistant.exceptions import ConfigEntryAuthFailed
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
-from .api import AuthError, LuminousApi
+from .api import AuthError, LuminousApi, energy_flows
 
 DOMAIN = "luminous_connect"
 PLATFORMS = [Platform.SENSOR]
@@ -21,10 +21,12 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
     async def update() -> dict:
         try:
-            return {
-                str(plant["id"]): {"name": plant.get("plantName"), "stats": await api.get_stats(plant["id"])}
-                for plant in await api.get_plants()
-            }
+            plants = {}
+            for plant in await api.get_plants():
+                stats = await api.get_stats(plant["id"])
+                stats["flows"] = energy_flows(stats)
+                plants[str(plant["id"])] = {"name": plant.get("plantName"), "stats": stats}
+            return plants
         except AuthError as err:
             raise ConfigEntryAuthFailed from err
 
@@ -34,7 +36,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         config_entry=entry,
         name=DOMAIN,
         update_method=update,
-        update_interval=timedelta(minutes=5),
+        update_interval=timedelta(minutes=2),
     )
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator

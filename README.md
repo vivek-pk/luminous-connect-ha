@@ -1,6 +1,6 @@
 # Luminous Connect X for Home Assistant
 
-Reads your solar plant data from the Luminous Connect X cloud every 5 minutes.
+Reads your solar plant data from the Luminous Connect X cloud every 2 minutes.
 
 ## Install
 
@@ -10,7 +10,23 @@ Reads your solar plant data from the Luminous Connect X cloud every 5 minutes.
 
 Each plant shows up as a device with these sensors: solar, load and grid power (kW); battery % and voltage; grid voltage; solar energy today, this month and lifetime; consumption today (kWh); battery and grid state; and last update time.
 
-For the Energy dashboard, use **Solar energy today** as solar production.
+It also adds one-way power sensors (grid import/export, battery charge/discharge) and matching kWh totals for the Energy dashboard.
+
+## Energy dashboard
+
+Go to **Settings → Dashboards → Energy** and pick:
+
+| Energy dashboard field | Sensor |
+|---|---|
+| Grid consumption | Grid import energy |
+| Return to grid | Grid export energy |
+| Solar production | Solar energy today |
+| Battery: energy going in | Battery charged energy |
+| Battery: energy coming out | Battery discharged energy |
+
+Home consumption is worked out by Home Assistant from these.
+
+Luminous does not give grid or battery kWh totals, so the integration builds them from power readings and the time between device reports. Expect them to be close to, but not exactly, the Luminous app's numbers. Gaps longer than 30 minutes (device offline) are not counted. The first numbers appear after the second device report.
 
 ## Troubleshooting
 

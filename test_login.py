@@ -11,7 +11,7 @@ import sys
 import aiohttp
 
 sys.path.insert(0, str(pathlib.Path(__file__).parent / "custom_components" / "luminous_connect"))
-from api import LuminousApi, parse_number  # noqa: E402
+from api import LuminousApi, energy_flows, parse_number  # noqa: E402
 
 assert parse_number(3) == 3
 assert parse_number("1,234.5 kWh") == 1234.5
@@ -27,7 +27,9 @@ async def main() -> None:
         plants = await api.get_plants()
         print("Plants:", [(p["id"], p.get("plantName")) for p in plants])
         for plant in plants:
-            print(json.dumps(await api.get_stats(plant["id"]), indent=2))
+            stats = await api.get_stats(plant["id"])
+            print(json.dumps(stats, indent=2))
+            print("Flows (kW):", energy_flows(stats))
 
 
 asyncio.run(main())

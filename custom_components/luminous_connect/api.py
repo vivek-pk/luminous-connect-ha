@@ -25,6 +25,29 @@ def parse_number(value):
     return float(match[0]) * (1000 if "MWh" in text else 1)
 
 
+# statsV1 "animationFlow" codes -> direction, copied from the web app's energy-flow animation switch.
+GRID_IMPORT = {"1.5", "1.7", "1.11", "1.12", "2.5", "2.7", "2.11", "2.12", "3.5", "3.7", "3.11", "3.12", "4.5", "4.7", "4.9", "4.11", "6.3", "6.4", "6.5", "7.3", "7.4", "9.3", "9.4", "9.5", "10.3", "10.4", "13.6", "13.7", "13.9", "13.10", "13.11", "14.3", "14.4", "14.5", "15.3", "15.4", "15.5", "15.13", "15.15"}
+GRID_EXPORT = {"4.12", "4.13", "4.14", "4.15", "5.1", "10.5", "10.6", "13.12", "13.13", "13.14", "13.15", "13.16", "15.8", "15.9", "15.10", "15.12", "15.16", "15.17", "15.18"}
+BATTERY_CHARGE = {"1.2", "1.7", "1.8", "1.11", "2.2", "2.7", "2.8", "2.11", "3.2", "3.7", "3.8", "3.11", "4.2", "4.7", "4.8", "4.9", "4.11", "4.12", "4.13", "6.4", "6.5", "7.4", "9.4", "9.5", "13.3", "13.7", "13.8", "13.9", "13.10", "13.12", "13.13", "14.4", "14.5", "15.4", "15.5", "15.7", "15.9", "15.10", "15.11", "15.13"}
+BATTERY_DISCHARGE = {"1.3", "1.4", "2.3", "2.4", "3.3", "3.4", "4.3", "4.4", "6.2", "7.2", "9.2", "13.4", "13.5", "13.16", "14.2", "15.2", "15.14", "15.16", "15.17", "15.18"}
+
+
+def energy_flows(data: dict) -> dict:
+    """Split grid and battery power into one-way flows in kW, as the Energy dashboard needs."""
+    stats = data.get("stats") or {}
+    code = str(data.get("animationFlow"))
+    grid = abs(parse_number(stats.get("totalGrid")) or 0)
+    if data.get("inverterType") == "ARCTIC_HYBRID":
+        grid /= 1000  # this model reports W, the others kW
+    battery = abs(parse_number(stats.get("batteryPower")) or 0) / 1000  # always W
+    return {
+        "grid_import": grid if code in GRID_IMPORT else 0.0,
+        "grid_export": grid if code in GRID_EXPORT else 0.0,
+        "battery_charge": battery if code in BATTERY_CHARGE else 0.0,
+        "battery_discharge": battery if code in BATTERY_DISCHARGE else 0.0,
+    }
+
+
 class LuminousApi:
     def __init__(self, session: aiohttp.ClientSession, email: str, password: str) -> None:
         self._session = session
