@@ -1,0 +1,10 @@
+{
+  "domain": "luminous_connect",
+  "name": "Luminous Connect X",
+  "codeowners": [],
+  "config_flow": true,
+  "documentation": "https://luminousconnectx.com",
+  "iot_class": "cloud_polling",
+  "requirements": [],
+  "version": "0.1.0"
+}

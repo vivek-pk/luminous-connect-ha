@@ -1,0 +1,23 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Luminous Connect X",
+        "description": "Use the same email and password you use on luminousconnectx.com.",
+        "data": {
+          "email": "Email",
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Wrong email or password.",
+      "cannot_connect": "Could not reach the Luminous servers."
+    },
+    "abort": {
+      "already_configured": "This Luminous account is already added.",
+      "reauth_successful": "Login updated.",
+      "unique_id_mismatch": "That is a different Luminous account than the one being fixed."
+    }
+  }
+}
